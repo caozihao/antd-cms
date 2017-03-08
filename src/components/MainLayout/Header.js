@@ -5,7 +5,7 @@ import "./Header.less";
 
 class Headers extends Component {
   render(){
-    const position = this.props.position;
+    const { location } = this.props;
     return (
       <Menu
         theme="dark"

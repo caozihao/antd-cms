@@ -3,7 +3,7 @@ import * as usersService from '../services/users';
 // dva将action和reducer封装到model当中
 export default {
   //全局 state 上的 key
-  namespace: 'users666', //相当于redux中的state
+  namespace: 'users', //相当于redux中的state
   //是初始值，在这里是空数组
   state: {
     list: [],
@@ -12,25 +12,27 @@ export default {
   },
   //以 key/value 格式定义 reducer。用于处理同步操作，唯一可以修改 state 的地方。由 action 触发。
   reducers: {
+    //处理非异步操作，保存到state
     save(state, { payload: { data: list, total, page } }) {
       return { ...state, list, total, page };
-    },
+    }
+
   },
   //以 key/value 格式定义 effect。用于处理异步操作和业务逻辑，
   // 不直接修改 state。由 action 触发，可以触发 action，可以和服务器交互，
   // 可以获取全局 state 的数据等等。
   effects: {
+    // 处理异步请求
     // 1,saga 的作用最主要还是解决复杂的异步交互情况，特别是竞争状态。
     // 2,saga 是通用方案，不管是简单还是复杂，有些业务看起来简单，但说不定有一个点的异步逻辑比较复杂呢。竞争状态是其中的一个场景，我觉得他最重要的点是可以统一管理业务代码，并且只需要接收一个 action 来触发。
-    *fetch123({ payload: { page = 1 } }, { call, put }) {
+    *fetch({ payload: { page = 1 } }, { call, put }) {
       const { data, headers } = yield call(usersService.fetch, { page });
-      console.log("put----->1");
       yield put({
         type: 'save',
         payload: {
           data,
           total: parseInt(headers['x-total-count'], 10),
-          page: parseInt(page, 10),
+          page: parseInt(page, 10)
         }
       });
     },
@@ -53,10 +55,11 @@ export default {
     //重新加载
     *reload(action, { put, select }) {
       // 2、select  作用和 redux thunk 中的 getState 相同。
+      console.log("state----->",state);
       const page = yield select(state => state.users.page);
       yield put({ type: 'fetch', payload: { page } });
       console.log("state",this.state)
-    },
+    }
   },
   // 以 key/value 格式定义 subscription。subscription 是订阅，用于订阅一个数据源，
   // 然后根据需要 dispatch 相应的 action。在 app.start() 时被执行，
@@ -69,10 +72,10 @@ export default {
       return history.listen(({ pathname, query }) => {
         console.log("query---------->",query);
         if (pathname === '/users') {
-          dispatch({ type: 'fetch123', payload: query });
+          dispatch({ type: 'fetch', payload: query });
         }
       });
 
-    },
-  },
+    }
+  }
 };

@@ -2,7 +2,7 @@ import fetch from 'dva/fetch';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
-    return response;
+      return response;
   }
 
   const error = new Error(response.statusText);
@@ -26,11 +26,11 @@ export default async function request(url, options) {
 
   const ret = {
     data,
-    headers: {},
+    headers: {}
   };
 
   if (response.headers.get('x-total-count')) {
-    ret.headers['x-total-count'] = response.headers.get('x-total-count');
+     ret.headers['x-total-count'] = response.headers.get('x-total-count');
   }
 
   return ret;

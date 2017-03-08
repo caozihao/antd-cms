@@ -12,7 +12,7 @@ const app = dva({
   history: browserHistory,
   onError(e) {
     message.error(e.message, ERROR_MSG_DURATION);
-  },
+  }
 });
 
 // 2. Plugins

@@ -3,11 +3,13 @@ const {Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import "./MainLayout.less";
 import Headers from "./Header";
+import React, { Component } from 'react';
+import logoPng from "../../assets/logo.png";
 
-class MainLayout extends React.Component{
-
+class MainLayout extends Component{
       constructor(props) {
-        super(props)
+        super(props);
+        //antd的局部属性设置
           this.state = {
             collapsed: false,
             mode: 'inline'
@@ -40,7 +42,9 @@ class MainLayout extends React.Component{
               collapsed={this.state.collapsed}
               onCollapse={this.onCollapse}
             >
-              <div className="logo" />
+              <div className="logo">
+                <img src= { logoPng } />
+              </div>
               <Menu theme="dark" mode={this.state.mode} defaultSelectedKeys={['6']}>
                 <SubMenu
                   key="sub1"

@@ -8,20 +8,20 @@ class UserEditModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false,
+      visible: false
     };
   }
 
   showModelHandler = (e) => {
     if (e) e.stopPropagation();
     this.setState({
-      visible: true,
+      visible: true
     });
   };
 
   hideModelHandler = () => {
     this.setState({
-      visible: false,
+      visible: false
     });
   };
 
@@ -36,12 +36,13 @@ class UserEditModal extends Component {
   };
 
   render() {
+
     const { children } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { name, email, website } = this.props.record;
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      wrapperCol: { span: 14 }
     };
 
     return (
@@ -62,7 +63,7 @@ class UserEditModal extends Component {
             >
               {
                 getFieldDecorator('name', {
-                  initialValue: name,
+                  initialValue: name
                 })(<Input />)
               }
             </FormItem>
@@ -72,7 +73,7 @@ class UserEditModal extends Component {
             >
               {
                 getFieldDecorator('email', {
-                  initialValue: email,
+                  initialValue: email
                 })(<Input />)
               }
             </FormItem>
@@ -82,7 +83,7 @@ class UserEditModal extends Component {
             >
               {
                 getFieldDecorator('website', {
-                  initialValue: website,
+                  initialValue: website
                 })(<Input />)
               }
             </FormItem>
@@ -90,6 +91,7 @@ class UserEditModal extends Component {
         </Modal>
       </span>
     );
+    
   }
 }
 
