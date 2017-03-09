@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input,Checkbox} from 'antd';
 
 const FormItem = Form.Item;
+const defaultCheckedList = [];
 
 class UserEditModal extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      visible: false
+    //只存在于组件内的state
+    state = {
+      visible: false,
+      checkedList: defaultCheckedList,
+      indeterminate: true,
+      checkAll: false
     };
-  }
 
   showModelHandler = (e) => {
     if (e) e.stopPropagation();
@@ -47,52 +48,55 @@ class UserEditModal extends Component {
 
     return (
       <span>
+
         <span onClick={this.showModelHandler}>
           { children }
         </span>
+
         <Modal
           title="Edit User"
           visible={this.state.visible}
           onOk={this.okHandler}
-          onCancel={this.hideModelHandler}
-        >
+          onCancel={this.hideModelHandler}>
+
           <Form horizontal onSubmit={this.okHandler}>
+
             <FormItem
               {...formItemLayout}
-              label="Name"
-            >
+              label="Name">
               {
                 getFieldDecorator('name', {
                   initialValue: name
                 })(<Input />)
               }
             </FormItem>
+
             <FormItem
               {...formItemLayout}
-              label="Email"
-            >
+              label="Email">
               {
                 getFieldDecorator('email', {
                   initialValue: email
                 })(<Input />)
               }
             </FormItem>
+
             <FormItem
               {...formItemLayout}
-              label="Website"
-            >
+              label="Website">
               {
                 getFieldDecorator('website', {
                   initialValue: website
                 })(<Input />)
               }
             </FormItem>
+
           </Form>
         </Modal>
       </span>
     );
-    
   }
 }
+
 
 export default Form.create()(UserEditModal);

@@ -1,4 +1,6 @@
 import * as usersService from '../services/users';
+import { PAGE_SIZE } from "../constants";
+
 
 // dva将action和reducer封装到model当中
 export default {
@@ -7,14 +9,15 @@ export default {
   //是初始值，在这里是空数组
   state: {
     list: [],
-    total: null,
-    page: null
+    totalPage: null,
+    curPage: null,
+    pageSize: null
   },
   //以 key/value 格式定义 reducer。用于处理同步操作，唯一可以修改 state 的地方。由 action 触发。
   reducers: {
     //处理非异步操作，保存到state
-    save(state, { payload: { data: list, total, page } }) {
-      return { ...state, list, total, page };
+    save(state, { payload: { data: list, totalPage, curPage ,pageSize} }) {
+      return { ...state, list, totalPage, curPage ,pageSize};
     }
 
   },
@@ -25,16 +28,18 @@ export default {
     // 处理异步请求
     // 1,saga 的作用最主要还是解决复杂的异步交互情况，特别是竞争状态。
     // 2,saga 是通用方案，不管是简单还是复杂，有些业务看起来简单，但说不定有一个点的异步逻辑比较复杂呢。竞争状态是其中的一个场景，我觉得他最重要的点是可以统一管理业务代码，并且只需要接收一个 action 来触发。
-    *fetch({ payload: { page = 1 } }, { call, put }) {
-      const { data, headers } = yield call(usersService.fetch, { page });
+    *fetch({ payload: { pg = 1 ,pg_size = PAGE_SIZE } }, { call, put }) {
+      const { data, headers } = yield call(usersService.fetch,pg ,pg_size);
       yield put({
         type: 'save',
         payload: {
           data,
-          total: parseInt(headers['x-total-count'], 10),
-          page: parseInt(page, 10)
+          totalPage: parseInt(headers['x-total-count'], 10),
+          curPage: parseInt(pg, 10),
+          pageSize:parseInt(pg_size)
         }
       });
+
     },
     *remove({ payload: id }, { call, put }) {
       //put:作用和 redux 中的 dispatch 相同。
@@ -71,9 +76,11 @@ export default {
 
       return history.listen(({ pathname, query }) => {
         console.log("query---------->",query);
-        if (pathname === '/users') {
-          dispatch({ type: 'fetch', payload: query });
+
+        if (pathname === '/users' || pathname === '/' ) {
+            dispatch({ type: 'fetch', payload: query });
         }
+
       });
 
     }

@@ -7,9 +7,9 @@ class IndexPage extends Component{
      const position = this.props.position;
      const children = this.props.children;
      return (
-       <MainLayout position = { position }>
-         { children }
-       </MainLayout>
+         <MainLayout position = { position }>
+           { children }
+         </MainLayout>
      );
    }
  }
