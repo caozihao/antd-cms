@@ -68,7 +68,7 @@ class MainLayout extends Component{
 
             <Layout>
 
-              <Header style={{ background: '#fff', padding: 0 }}>
+              <Header className="context-head">
                 <div className="pull-left">
                 <Icon
                   className="trigger"
@@ -82,7 +82,7 @@ class MainLayout extends Component{
 
               </Header>
 
-              <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 800 }}>
+              <Content className="main-content" >
                 { children }
               </Content>
 

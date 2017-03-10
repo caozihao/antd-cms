@@ -18,20 +18,10 @@ class Users extends Component{
     this.setState({ selectedRowKeys });
   };
 
-  deleteHandler(i,id){
-    const { dispatch} = this.props;
-    dispatch({
-      type: 'users/remove',
-      payload: id
-    });
-  }
-
+  //批量删除
   deleteHandlerByIds(){
-    // const { dispatch} = this.props;
-    // dispatch({
-    //   type: 'users/removeByIds',
-    //   payload: ids
-    // });
+    const delArr = this.state.selectedRowKeys;
+    console.log("delArr------->",delArr);
   }
 
   //切换每页显示的数量
@@ -61,11 +51,21 @@ class Users extends Component{
     }));
   }
 
-  editHandler(id, values) {
+  //编辑
+  editHandler(id,values) {
     const { dispatch } = this.props;
     dispatch({
       type: 'users/patch',
       payload: { id, values }
+    });
+  }
+
+  //删除
+  deleteHandler(id){
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'users/remove',
+      payload: id
     });
   }
 
@@ -123,7 +123,7 @@ class Users extends Component{
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: text => <a href="">{text}</a>
+        render: text => <a href="javascript:void(0)">{text}</a>
       },
       {
         title: 'Email',
@@ -142,11 +142,11 @@ class Users extends Component{
         render: (text, record) => (
           <span className={styles.operation}>
 
-            <UserModal record={ record } onOk={ this.editHandler.bind(this,null,record.id)}>
+            <UserModal record={ record } onOk={ this.editHandler.bind(this,record.id)} title={ "编辑" }>
               <Icon type="edit" className="button-bar-icon" />
             </UserModal>
 
-            <Popconfirm title="Confirm to delete?" onConfirm={ this.deleteHandler.bind(this,null,record.id) }>
+            <Popconfirm title="是否要删除该条信息?" onConfirm={ this.deleteHandler.bind(this,record.id) }>
               <Icon type="delete" className="button-bar-icon"/>
             </Popconfirm>
 
@@ -169,12 +169,12 @@ class Users extends Component{
             <Option value="100">100</Option>
           </Select>
 
-          <UserModal  record={{}} onOk={ this.createHandler.bind(this) }>
+          <UserModal  record={{}} onOk={ this.createHandler.bind(this) } title={"添加" }>
               <Button className="mg-r-10" type="ant-btn ant-btn-primary">添加</Button>
           </UserModal>
 
           <Popconfirm title="Confirm to delete?" onConfirm={ this.deleteHandlerByIds.bind(this) }>
-            <Button className="mg-r-10"  type="ant-btn ant-btn-danger">批量刪除</Button>
+              <Button className="mg-r-10"  type="ant-btn ant-btn-danger">批量刪除</Button>
           </Popconfirm>
 
           </div>

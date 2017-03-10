@@ -1,7 +1,6 @@
 import * as usersService from '../services/users';
 import { PAGE_SIZE } from "../constants";
 
-
 // dva将action和reducer封装到model当中
 export default {
   //全局 state 上的 key
@@ -29,6 +28,10 @@ export default {
     // 1,saga 的作用最主要还是解决复杂的异步交互情况，特别是竞争状态。
     // 2,saga 是通用方案，不管是简单还是复杂，有些业务看起来简单，但说不定有一个点的异步逻辑比较复杂呢。竞争状态是其中的一个场景，我觉得他最重要的点是可以统一管理业务代码，并且只需要接收一个 action 来触发。
     *fetch({ payload: { pg = 1 ,pg_size = PAGE_SIZE } }, { call, put }) {
+
+      console.log("pg-------->",pg);
+      console.log("pg_size-------->",pg_size);
+
       const { data, headers } = yield call(usersService.fetch,pg ,pg_size);
       yield put({
         type: 'save',
@@ -60,10 +63,14 @@ export default {
     //重新加载
     *reload(action, { put, select }) {
       // 2、select  作用和 redux thunk 中的 getState 相同。
-      console.log("state----->",state);
-      const page = yield select(state => state.users.page);
-      yield put({ type: 'fetch', payload: { page } });
-      console.log("state",this.state)
+      const [curPage,pageSize] = yield select(state => [state.users.curPage,state.users.pageSize]);
+
+      const query = {
+        pg:curPage,
+        pg_size:pageSize
+      };
+
+      yield put({ type: 'fetch', payload: query });
     }
   },
   // 以 key/value 格式定义 subscription。subscription 是订阅，用于订阅一个数据源，

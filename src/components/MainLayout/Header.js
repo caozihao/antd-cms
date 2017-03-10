@@ -4,6 +4,7 @@ import { Link } from 'dva/router';
 import "./Header.less";
 
 class Headers extends Component {
+
   render(){
     const { location } = this.props;
     return (
@@ -28,6 +29,7 @@ class Headers extends Component {
       </Menu>
     );
   }
+
 }
 
 export default Headers;
